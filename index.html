@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Verify you are human</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QD89HE5P0R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QD89HE5P0R', {send_page_view: false});
+</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<style>
+  body,html{margin:0;padding:0;height:100vh;background:#fff;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif}
+  .turnstile-container{text-align:center}
+</style>
+</head>
+<body>
+<div class="turnstile-container">
+  <!-- 强制 normal 尺寸，确保显示勾选框 -->
+  <div class="cf-turnstile"
+       data-sitekey="0x4AAAAAACCc9LXfBlNh2yNo"
+       data-callback="onSuccess"
+       data-theme="light"
+       data-size="normal">
+  </div>
+</div>
+
+<script>
+// 手动渲染，确保 widget 加载成功
+window.onload = function() {
+  if (typeof turnstile !== 'undefined') {
+    console.log('Turnstile loaded, rendering widget...');
+    turnstile.render('.cf-turnstile', {
+      sitekey: '0x4AAAAAACCc9LXfBlNh2yNo',
+      callback: onSuccess
+    });
+  } else {
+    console.error('Turnstile script failed to load');
+    // 加载失败直接跳（防卡死）
+    setTimeout(() => location.replace('https://x.com'), 5000);
+  }
+};
+
+function onSuccess(token) {
+  console.log('Verification success, token:', token.substring(0, 10) + '...');
+  gtag('event', 'human_verified', {value: 1});
+  location.replace('https://x.com');
+}
+
+console.log('Page loaded, waiting for Turnstile...');
+</script>
+</body>
+</html>
